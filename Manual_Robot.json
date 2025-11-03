@@ -1,0 +1,67 @@
+import gamepad
+from cyberpi import *
+import mbot2
+import time
+
+console.println('Praise the Omnissiah, sacred father of the forge of man. \nFather of logic, grant me your knowledge, the flesh is weak. \nOmnissiah, Emperor of mankind, you bestowed your knowledge to the Adeptus Mechanicus, and we will enforce your will.')
+
+DZ = 0.1
+POW = 0.5
+servo_angle = 90
+inward = False  
+
+while True:
+  
+    forward = gamepad.get_joystick('Lx')
+    turn = gamepad.get_joystick('Ly')
+
+    if abs(forward) < DZ:
+        forward = 0
+    if abs(turn) < DZ:
+        turn = 0
+
+    if forward == 0 and turn == 0:
+        mbot2.EM_stop('ALL')
+    else:
+        left = POW * (forward + turn)
+        right = POW * (forward - turn)
+        mbot2.drive_power(left, right)
+
+   
+    down = gamepad.get_joystick('Ry')
+    if abs(down) < DZ:
+        down = 0
+
+    target_angle = int(((-down + 1) / 2) * 180)
+
+    if servo_angle < target_angle:
+        servo_angle += 2
+        if servo_angle > target_angle:
+            servo_angle = target_angle
+    elif servo_angle > target_angle:
+        servo_angle -= 2
+        if servo_angle < target_angle:
+            servo_angle = target_angle
+
+    mbot2.servo_set(servo_angle, 's3')
+
+    
+    if gamepad.is_key_pressed('N4'):
+        time.sleep_ms(20)
+        if gamepad.is_key_pressed('N4'):
+            inward = not inward
+            if inward:
+                mbot2.servo_set(75, 's1')
+                mbot2.servo_set(105, 's2')
+            else:
+                mbot2.servo_set(120, 's1')
+                mbot2.servo_set(60, 's2')
+
+            
+            while gamepad.is_key_pressed('N4'):
+                time.sleep_ms(10)
+
+    time.sleep(0.05)
+
+
+
