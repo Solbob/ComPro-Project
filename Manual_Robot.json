@@ -9,6 +9,7 @@ DZ = 0.1
 POW = 0.5
 servo_angle = 90
 inward = False  
+roll = False
 
 while True:
   
@@ -28,6 +29,7 @@ while True:
         mbot2.drive_power(left, right)
 
    
+   
     down = gamepad.get_joystick('Ry')
     if abs(down) < DZ:
         down = 0
@@ -35,16 +37,17 @@ while True:
     target_angle = int(((-down + 1) / 2) * 180)
 
     if servo_angle < target_angle:
-        servo_angle += 2
+        servo_angle += 0.8 #speed
         if servo_angle > target_angle:
             servo_angle = target_angle
     elif servo_angle > target_angle:
-        servo_angle -= 2
+        servo_angle -= 0.8 #speed lower mean lower num
         if servo_angle < target_angle:
             servo_angle = target_angle
 
     mbot2.servo_set(servo_angle, 's3')
 
+    
     
     if gamepad.is_key_pressed('N4'):
         time.sleep_ms(20)
@@ -56,10 +59,27 @@ while True:
             else:
                 mbot2.servo_set(120, 's1')
                 mbot2.servo_set(60, 's2')
-
             
             while gamepad.is_key_pressed('N4'):
                 time.sleep_ms(10)
+ 
+ 
+                
+    if gamepad.is_key_pressed('N3'):
+        time.sleep_ms(20)
+        if gamepad.is_key_pressed('N3'):
+           
+            while gamepad.is_key_pressed('N3'):
+                time.sleep_ms(10)
+
+            roll = not roll  
+
+            if roll:
+                mbot2.motor_set(255, "M1")   
+            else:
+                mbot2.motor_set(0, "M1")     
+
+
 
     time.sleep(0.05)
 
