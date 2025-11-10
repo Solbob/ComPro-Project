@@ -71,7 +71,7 @@ void readSonars(SonarData *s) {
   Serial.print(" | Right: "); Serial.println((*s).right);
 }
 
-// ================= MOTOR CONTROL =================
+// MOTOR CONTROL
 void moveForward(int speed) {
   analogWrite(ENA, speed);
   analogWrite(ENB, speed);
@@ -117,7 +117,7 @@ void stopMotors() {
   digitalWrite(IN4, LOW);
 }
 
-// ================= SERVO CONTROL =================
+// SERVO CONTROL
 void grabSequence() {
   Serial.println("Grab sequence started!");
   moveForward(MOTOR_SPEED_FWD);
